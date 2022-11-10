@@ -2,7 +2,6 @@
 hospital flow simulation.
 """
 
-from typing import List
 import simpy
 from DataManager import DataManager
 from config import *
