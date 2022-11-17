@@ -44,7 +44,11 @@ def setup(env: simpy.Environment, dm: DataManager):
             env.process(patient.go_through(hospital, dm, VERBOSE))
 
 
-if __name__ == "__main__":
+def create_file_name():
+    return f'{T_INTER}-p{PREPARATION["NUM_UNITS"]}t{PREPARATION["TIME_M"]}-o{OPERATION["NUM_UNITS"]}t{OPERATION["TIME_M"]}-r{RECOVERY["NUM_UNITS"]}t{RECOVERY["TIME_M"]}-d{DEATH_PROB}-a{ACCIDENT_PROB}'
+
+
+def main():
     # Setup and start the simulation
     print("Hospital simulation")
 
@@ -63,8 +67,13 @@ if __name__ == "__main__":
         # Execute!
         env.run(until=SIM_TIME)
         dm.output()
+        dm.output_to_save_file(f"{SAVE_FILE_LOCATION}\\{create_file_name()}.csv")
         full_dm += dm
 
     if SIM_COUNT > 1:
         print("\n\nAverage data from all simulations")
         full_dm.output()
+
+
+if __name__ == "__main__":
+    main()

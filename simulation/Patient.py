@@ -23,6 +23,10 @@ class Patient:
         if verbose:
             print(f"{self.name} arrives at the hospital at {self.env.now:.3g}")
 
+        # Entrance queue length when the patient arrives at the hospital.
+        entrance_queue_length = len(hospital.preparation.resource.queue)
+        dm.entrance_queue.append(entrance_queue_length)
+
         prep_wd: WaitData = yield self.env.process(hospital.preparation.wait_for())
         self.data.preparation_queue_time = prep_wd.wait_time
         start_time_hospital = self.env.now
