@@ -19,8 +19,8 @@ class HospitalUnit:
     def __init__(
         self,
         env: simpy.Environment,
-        process_time_min: float,
         room_count: int,
+        process_time_min: float,
         distribution: Callable[[float], float],
     ) -> None:
         self.env = env

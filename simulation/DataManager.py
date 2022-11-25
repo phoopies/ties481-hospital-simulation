@@ -9,6 +9,7 @@ class DataManager:
     def __init__(self, sim_time, sim_count=1) -> None:
         self.entrance_queue: List[int] = [] # Initial queue length for each patient
         self.waiting: float = 0
+        self.operating: float = 0
         self.throughput_time: float = 0
         self.hospital_throughput_time: float = 0
         self.patients_cleared: float = 0
@@ -20,7 +21,8 @@ class DataManager:
     def output(self) -> str:
         print("*" * 50)
         print(f"{self.average_patients_cleared:.3g} patient(s) cleared!")
-        print(f"Average queue length {self.average_entrance_queue_length:.3g} patients")
+        print(f"Average queue length* {self.average_entrance_queue_length:.3f} patients")
+        print(f"Total time operation unit was actually operating {self.average_operating:.3f}")
         print(
             f"Total time the operation unit was waiting: {self.average_waiting:.3g} minutes."
         )
@@ -44,7 +46,8 @@ class DataManager:
             self.sim_count,
             self.sim_time,
             self.average_entrance_queue_length,
-            self.waiting,
+            self.average_operating,
+            self.average_waiting,
             self.average_throughput_time,
             self.average_throughput_time_in_hospital,
             self.average_patients_cleared,
@@ -60,6 +63,7 @@ class DataManager:
             "count",
             "total_time",
             "entrance_queue",
+            "operation_time",
             "wait_time",
             "throughput_time",
             "hospital_throughput_time",
@@ -74,6 +78,7 @@ class DataManager:
     def __add__(self, dm: "DataManager"):
         new_dm = DataManager(self.sim_time + dm.sim_time, self.sim_count + dm.sim_count)
         new_dm.entrance_queue = self.entrance_queue + dm.entrance_queue
+        new_dm.operating = self.operating + dm.operating
         new_dm.waiting = self.waiting + dm.waiting
         new_dm.throughput_time = self.throughput_time + dm.throughput_time
         new_dm.hospital_throughput_time = (
@@ -87,6 +92,10 @@ class DataManager:
     @property
     def average_patients_cleared(self):
         return float(self.patients_cleared) / self.sim_count
+
+    @property
+    def average_operating(self):
+        return float(self.operating) / self.sim_count
 
     @property
     def average_waiting(self):

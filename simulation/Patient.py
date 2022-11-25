@@ -56,6 +56,7 @@ class Patient:
 
         oper_pd: ProcessData = yield self.env.process(hospital.operation.process())
         self.data.operation_time = oper_pd.process_time
+        dm.operating += oper_pd.process_time
 
         if not oper_pd.success:  # Patient died
             if verbose:
